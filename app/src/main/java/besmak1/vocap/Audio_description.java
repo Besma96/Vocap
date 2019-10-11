@@ -1,52 +1,39 @@
 package besmak1.vocap;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.speech.RecognizerIntent;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.UserHandle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Base64;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageSwitcher;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.EditText;
-import android.widget.Button;
 import android.widget.Toast;
-import android.widget.ViewSwitcher;
 
-import java.lang.Object.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class Audio_description extends AppCompatActivity {
     private TextView nom_image;
-    private int currentimage=0;
-    private ImageView image ;
+    private int currentimage = 0;
+    private ImageView image;
     private Button next;
     private Button ecoute;
     private Button parler;
     private String retour;
     private String resName;
+    private TextToSpeech mTTs;
 
 
     @Override
@@ -65,60 +52,86 @@ public class Audio_description extends AppCompatActivity {
         level.add("D2");
         level.add("D3");
 
-        retour = "";
-        DisplayreadLevel(level.get(1), currentimage);
-        parler.setOnClickListener(new View.OnClickListener() {
-
+        retour = "raisin";
+        String nameCurrentImage = DisplayreadLevel(level.get(1), currentimage);
+        mTTs = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
-            public void onClick(View v) {
-                if (v == parler) {
-                    getSpeechInput(v);
+            public void onInit(int status) {
+                if(status == TextToSpeech.SUCCESS){
+                    int result = mTTs.setLanguage(Locale.FRANCE);
+
+                    if (result == TextToSpeech.LANG_MISSING_DATA
+                            || result == TextToSpeech.LANG_NOT_SUPPORTED){
+                        Log.e("TTS", "Langugae not supported");
+
+                    }else{
+                        ecoute.setEnabled(true);
+                    }
+                }else{
+                    Log.e("TTs", "Initialization failed");
                 }
             }
         });
-        if (retour == "") {
-            Toast.makeText(getApplicationContext(), "Je n'ai pas compris votre réponse", Toast.LENGTH_SHORT).show();
-        }else{
-            if(retour==nom_image.toString()){
+
+        ecoute.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                speak();
+            }
+        });
+
+        final boolean[] someoneSpeak = {false};
+        parler.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                someoneSpeak[0] = getSpeechInput(v);
+            }
+        });
+        if(someoneSpeak[0]){
+            if (retour == nameCurrentImage) {
                 Toast.makeText(getApplicationContext(), "Bravo ! ", Toast.LENGTH_SHORT).show();
                 DisplayreadLevel(level.get(1), currentimage);
-                Toast.makeText(getApplicationContext(), "Next Image", Toast.LENGTH_SHORT).show();
+                currentimage++;
+            } else {
+                Toast.makeText(getApplicationContext(), "Non cest " + nameCurrentImage, Toast.LENGTH_SHORT).show();
+                DisplayreadLevel(level.get(1), currentimage);
                 currentimage++;
             }
-            else{
-                Toast.makeText(getApplicationContext(), "non cest"+ nom_image.toString(), Toast.LENGTH_SHORT).show();
-            }
+        }
     }
 
-        }
+    public void speak(){
+        String txt = nom_image.getText().toString();
+        mTTs.speak(txt, TextToSpeech.QUEUE_FLUSH, null);
+    }
 
 
-
-
-    public void getSpeechInput(View view){
-        Intent intent= new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+    public boolean getSpeechInput(View view) {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Vous pouvez parler");
 
-        if(intent.resolveActivity(getPackageManager()) !=null){
-            startActivityForResult(intent, 10);
-            Toast.makeText(this, "Vous pouvez parler ! ", Toast.LENGTH_SHORT).show();
-
+        //commencement de l'intent
+        try {
+            //in there was no error
+            startActivityForResult(intent, 1000);
+            return true;
+        } catch (Exception e) {
+            //if there some error
+            Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            return false;
         }
-        else{
-            Toast.makeText(this, "Your Device Don't support speech Input", Toast.LENGTH_SHORT).show();
-        }
-        //startActivityForResult(intent, 10);
     }
 
     @Override
     // récupération de ce qui a été dit  dans le microphone du téléphone
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch(requestCode){
-            case 10:
-                if(resultCode == RESULT_OK && data != null){
+        switch (requestCode) {
+            case 1000:
+                if (resultCode == RESULT_OK && data != null) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     retour = result.get(0);
                 }
@@ -146,7 +159,7 @@ public class Audio_description extends AppCompatActivity {
 
 
     // récupération des images json
-    private int DisplayreadLevel(String level, int i){
+    private String DisplayreadLevel(String level, int i) {
         try {
             JSONObject jObject = new JSONObject(loadJSONFromAsset());
             JSONArray pluginfo = jObject.getJSONArray(level);// niveau D1
@@ -160,11 +173,11 @@ public class Audio_description extends AppCompatActivity {
             image.setImageDrawable(drawable);
 
 
-            return 1;
+            return resName;
         } catch (JSONException e) {
             e.printStackTrace();
             nom_image.setText("erreur JSONEXCeption");
-            return 0;
+            return "";
         }
 
     }
