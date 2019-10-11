@@ -52,7 +52,8 @@ public class Audio_description extends AppCompatActivity {
         level.add("D2");
         level.add("D3");
 
-        retour = "raisin";
+        retour = "";
+        nbdessai = 0;
         nameCurrentImage = DisplayreadLevel(level.get(1), currentimage);
         mTTs = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
@@ -84,7 +85,7 @@ public class Audio_description extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 getSpeechInput(v);
-                nbdessai = 1;
+                nbdessai ++;
             }
         });
     }
@@ -128,6 +129,7 @@ public class Audio_description extends AppCompatActivity {
                     if (nbdessai > 2) {
                         Toast.makeText(getApplicationContext(), "Ce n'est pas grave, tu y arrivera une prochaine fois", Toast.LENGTH_SHORT).show();
                         currentimage++;
+                        nbdessai = 0;
                         nameCurrentImage = DisplayreadLevel(level.get(1), currentimage);
                     } else {
                         Toast.makeText(getApplicationContext(), "Non, c'était " + nameCurrentImage + ". \n Essaye encore une fois", Toast.LENGTH_SHORT).show();
