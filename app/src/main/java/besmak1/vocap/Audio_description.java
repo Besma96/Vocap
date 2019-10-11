@@ -67,17 +67,12 @@ public class Audio_description extends AppCompatActivity {
 
         retour = "";
         DisplayreadLevel(level.get(1), currentimage);
-        currentimage++;
         parler.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 if (v == parler) {
                     getSpeechInput(v);
-
-                    //DisplayreadLevel(level.get(1), currentimage);
-                    //Toast.makeText(getApplicationContext(), "Next Image", Toast.LENGTH_SHORT).show();
-                    //currentimage++;
                 }
             }
         });
@@ -86,6 +81,9 @@ public class Audio_description extends AppCompatActivity {
         }else{
             if(retour==nom_image.toString()){
                 Toast.makeText(getApplicationContext(), "Bravo ! ", Toast.LENGTH_SHORT).show();
+                DisplayreadLevel(level.get(1), currentimage);
+                Toast.makeText(getApplicationContext(), "Next Image", Toast.LENGTH_SHORT).show();
+                currentimage++;
             }
             else{
                 Toast.makeText(getApplicationContext(), "non cest"+ nom_image.toString(), Toast.LENGTH_SHORT).show();
@@ -110,11 +108,11 @@ public class Audio_description extends AppCompatActivity {
         else{
             Toast.makeText(this, "Your Device Don't support speech Input", Toast.LENGTH_SHORT).show();
         }
-        startActivityForResult(intent, 10);
+        //startActivityForResult(intent, 10);
     }
 
     @Override
-    // récupération de ce qui a été dit  dans el microphone du téléphone
+    // récupération de ce qui a été dit  dans le microphone du téléphone
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
 
