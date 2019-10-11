@@ -44,13 +44,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/besmak1/vocap/Audio_description.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="872">
-              <caret line="135" selection-start-line="135" selection-end-line="135" />
+            <state relative-caret-position="2618">
+              <caret line="176" column="32" selection-start-line="176" selection-start-column="32" selection-end-line="176" selection-end-column="32" />
               <folding>
-                <element signature="e#1649#2297#0" expanded="true" />
-                <element signature="e#2296#2297#0" expanded="true" />
-                <element signature="e#2335#2474#0" expanded="true" />
-                <element signature="e#2473#2474#0" expanded="true" />
+                <element signature="e#1679#2334#0" expanded="true" />
+                <element signature="e#2333#2334#0" expanded="true" />
+                <element signature="e#2372#2513#0" expanded="true" />
+                <element signature="e#2512#2513#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -249,7 +249,7 @@
       <window_info anchor="bottom" id="Run" order="0" weight="0.4777975" />
       <window_info anchor="bottom" id="Logcat" order="1" weight="0.5150977" />
       <window_info anchor="bottom" id="TODO" order="2" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.38010657" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.21847247" />
       <window_info anchor="bottom" id="Terminal" order="4" weight="0.3285968" />
       <window_info anchor="bottom" id="Event Log" order="5" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="6" />
@@ -268,13 +268,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/besmak1/vocap/Audio_description.java</url>
-          <line>135</line>
-          <properties />
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/besmak1/vocap/Audio_description.java</url>
-          <line>86</line>
+          <line>85</line>
           <properties />
           <option name="timeStamp" value="5" />
         </line-breakpoint>
@@ -310,13 +304,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/besmak1/vocap/Audio_description.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="872">
-          <caret line="135" selection-start-line="135" selection-end-line="135" />
+        <state relative-caret-position="2618">
+          <caret line="176" column="32" selection-start-line="176" selection-start-column="32" selection-end-line="176" selection-end-column="32" />
           <folding>
-            <element signature="e#1649#2297#0" expanded="true" />
-            <element signature="e#2296#2297#0" expanded="true" />
-            <element signature="e#2335#2474#0" expanded="true" />
-            <element signature="e#2473#2474#0" expanded="true" />
+            <element signature="e#1679#2334#0" expanded="true" />
+            <element signature="e#2333#2334#0" expanded="true" />
+            <element signature="e#2372#2513#0" expanded="true" />
+            <element signature="e#2512#2513#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -16,10 +16,10 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -28,12 +28,12 @@ public class Audio_description extends AppCompatActivity {
     private TextView nom_image;
     private int currentimage = 0;
     private ImageView image;
-    private Button next;
     private Button ecoute;
-    private Button parler;
     private String retour;
-    private String resName;
     private TextToSpeech mTTs;
+    private String nameCurrentImage;
+    private List<String> level;
+    private int nbdessai;
 
 
     @Override
@@ -45,68 +45,57 @@ public class Audio_description extends AppCompatActivity {
         nom_image = findViewById(R.id.nom_image);
 
         ecoute = findViewById(R.id.bouton_ecoute);
-        parler = findViewById(R.id.bouton_parler);
+        Button parler = findViewById(R.id.bouton_parler);
 
-        final List<String> level = new ArrayList<String>();
+        level = new ArrayList<>();
         level.add("D1");
         level.add("D2");
         level.add("D3");
 
         retour = "raisin";
-        String nameCurrentImage = DisplayreadLevel(level.get(1), currentimage);
+        nameCurrentImage = DisplayreadLevel(level.get(1), currentimage);
         mTTs = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                if(status == TextToSpeech.SUCCESS){
+                if (status == TextToSpeech.SUCCESS) {
                     int result = mTTs.setLanguage(Locale.FRANCE);
 
                     if (result == TextToSpeech.LANG_MISSING_DATA
-                            || result == TextToSpeech.LANG_NOT_SUPPORTED){
+                            || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Log.e("TTS", "Langugae not supported");
 
-                    }else{
+                    } else {
                         ecoute.setEnabled(true);
                     }
-                }else{
+                } else {
                     Log.e("TTs", "Initialization failed");
                 }
             }
         });
 
-        ecoute.setOnClickListener(new View.OnClickListener(){
+        ecoute.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 speak();
             }
         });
 
-        final boolean[] someoneSpeak = {false};
-        parler.setOnClickListener(new View.OnClickListener(){
+        parler.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
-                someoneSpeak[0] = getSpeechInput(v);
+            public void onClick(View v) {
+                getSpeechInput(v);
+                nbdessai = 1;
             }
         });
-        if(someoneSpeak[0]){
-            if (retour == nameCurrentImage) {
-                Toast.makeText(getApplicationContext(), "Bravo ! ", Toast.LENGTH_SHORT).show();
-                DisplayreadLevel(level.get(1), currentimage);
-                currentimage++;
-            } else {
-                Toast.makeText(getApplicationContext(), "Non cest " + nameCurrentImage, Toast.LENGTH_SHORT).show();
-                DisplayreadLevel(level.get(1), currentimage);
-                currentimage++;
-            }
-        }
     }
 
-    public void speak(){
+    public void speak() {
         String txt = nom_image.getText().toString();
         mTTs.speak(txt, TextToSpeech.QUEUE_FLUSH, null);
     }
 
 
-    public boolean getSpeechInput(View view) {
+    public void getSpeechInput(View view) {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, Locale.getDefault());
@@ -116,11 +105,9 @@ public class Audio_description extends AppCompatActivity {
         try {
             //in there was no error
             startActivityForResult(intent, 1000);
-            return true;
         } catch (Exception e) {
             //if there some error
             Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-            return false;
         }
     }
 
@@ -129,13 +116,25 @@ public class Audio_description extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode) {
-            case 1000:
-                if (resultCode == RESULT_OK && data != null) {
-                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    retour = result.get(0);
+        if (requestCode == 1000) {
+            if (resultCode == RESULT_OK && data != null) {
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                retour = result.get(0);
+                if (retour.toLowerCase().equals(nameCurrentImage.toLowerCase())) {
+                    Toast.makeText(getApplicationContext(), "Bravo ! ", Toast.LENGTH_SHORT).show();
+                    currentimage++;
+                    nameCurrentImage = DisplayreadLevel(level.get(1), currentimage);
+                } else {
+                    if (nbdessai > 2) {
+                        Toast.makeText(getApplicationContext(), "Ce n'est pas grave, tu y arrivera une prochaine fois", Toast.LENGTH_SHORT).show();
+                        currentimage++;
+                        nameCurrentImage = DisplayreadLevel(level.get(1), currentimage);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Non, c'était " + nameCurrentImage + ". \n Essaye encore une fois", Toast.LENGTH_SHORT).show();
+                        nbdessai++;
+                    }
                 }
-                break;
+            }
         }
     }
 
@@ -149,7 +148,7 @@ public class Audio_description extends AppCompatActivity {
             byte[] buffer = new byte[size];
             is.read(buffer);
             is.close();
-            json = new String(buffer, "UTF-8");
+            json = new String(buffer, StandardCharsets.UTF_8);
         } catch (IOException ex) {
             ex.printStackTrace();
             return null;
@@ -166,7 +165,7 @@ public class Audio_description extends AppCompatActivity {
             JSONObject e = pluginfo.getJSONObject(i);
 
             String imagefile = e.getString("img");
-            resName = imagefile.split("\\.")[2];
+            String resName = imagefile.split("\\.")[2];
             nom_image.setText(resName);
             int id = getResources().getIdentifier(resName, "drawable", getPackageName());
             Drawable drawable = getResources().getDrawable(id);
@@ -176,7 +175,7 @@ public class Audio_description extends AppCompatActivity {
             return resName;
         } catch (JSONException e) {
             e.printStackTrace();
-            nom_image.setText("erreur JSONEXCeption");
+            nom_image.setText("erreur JSONEXCaption");
             return "";
         }
 
