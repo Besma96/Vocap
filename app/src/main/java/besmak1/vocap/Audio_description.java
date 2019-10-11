@@ -124,6 +124,7 @@ public class Audio_description extends AppCompatActivity {
                 if (retour.toLowerCase().equals(nameCurrentImage.toLowerCase())) {
                     Toast.makeText(getApplicationContext(), "Bravo ! ", Toast.LENGTH_SHORT).show();
                     currentimage++;
+                    nbdessai = 0;
                     nameCurrentImage = DisplayreadLevel(level.get(1), currentimage);
                 } else {
                     if (nbdessai > 2) {
@@ -133,6 +134,7 @@ public class Audio_description extends AppCompatActivity {
                         nameCurrentImage = DisplayreadLevel(level.get(1), currentimage);
                     } else {
                         Toast.makeText(getApplicationContext(), "Non, c'était " + nameCurrentImage + ". \n Essaye encore une fois", Toast.LENGTH_SHORT).show();
+                        speak();
                         nbdessai++;
                     }
                 }
