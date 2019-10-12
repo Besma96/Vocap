@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Vocap</string>
-    <string name="title_home">Home</string>
+    <string name="title_home">Acceuil</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_notifications">Réglage</string>
     <string name="title_activity_page_de_garde">PageDeGarde</string>
     <string name="title_activity_acceuil">Acceuil</string>
     <string name="title_activity_audio_description">Audio_description</string>

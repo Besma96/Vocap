@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
@@ -24,23 +23,43 @@
         android:textColor="@color/colorAccent"
         android:textSize="50sp" />
 
-    <Button
-        android:id="@+id/bouton_ecoute"
-        android:layout_width="185dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Ecouter"
-        android:textColor="@color/colorAccent" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/bouton_parler"
-        android:layout_width="164dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_weight="1"
-        android:text="Parler"
-        android:onClick="getSpeechInput"
-        android:textColor="@color/colorAccent" />
+        <Button
+            android:id="@+id/bouton_ecoute"
+            android:layout_width="205dp"
+            android:layout_height="150dp"
+            android:layout_weight="1"
+            android:text="Ecouter"
+            android:textColor="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/bouton_parler"
+            android:layout_width="205dp"
+            android:layout_height="150dp"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:onClick="getSpeechInput"
+            android:text="Parler"
+            android:layout_toRightOf="@+id/bouton_ecoute"
+            android:textColor="@color/colorAccent" />
+
+        <ImageView
+            android:layout_width="217dp"
+            android:layout_height="160dp"
+            android:layout_below="@+id/bouton_parler"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="25dp"
+            android:src="@drawable/vocap"
+            tools:layout_editor_absoluteX="11dp"
+            tools:layout_editor_absoluteY="4dp" />
+
+    </RelativeLayout>
 
 
 </LinearLayout>

@@ -114,6 +114,7 @@ public class Audio_description extends AppCompatActivity {
 
     @Override
     // récupération de ce qui a été dit  dans le microphone du téléphone
+    //verification de la bonne prononcition ou pas de ce qui a ete enregistré
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
