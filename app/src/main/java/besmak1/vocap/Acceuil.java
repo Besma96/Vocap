@@ -47,4 +47,16 @@ public class Acceuil extends AppCompatActivity {
         inflater.inflate(R.menu.navigation, menu);
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() ==0){
+            Intent acceuil = new Intent(Acceuil.this, Acceuil.class);
+            startActivity(acceuil);
+        }else{
+            Intent main = new Intent(Acceuil.this, MainActivity.class);
+            startActivity(main);
+        }
+        return true;
+    }
 }
