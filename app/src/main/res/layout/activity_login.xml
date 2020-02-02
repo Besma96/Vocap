@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/IV_Vocap_logo"
+        android:layout_width="312dp"
+        android:layout_height="190dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@mipmap/ic_launcher_foreground"
+        tools:layout_editor_absoluteY="39dp" />
+
+    <TextView
+        android:id="@+id/TV_information_connection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Entre tes informations pour te connecter"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18dp"
+        app:layout_constraintTop_toBottomOf="@+id/IV_Vocap_logo"
+        tools:layout_editor_absoluteX="35dp" />
+
+    <EditText
+        android:id="@+id/EV_login_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Prenom"
+        tools:layout_editor_absoluteX="60dp"
+        tools:layout_editor_absoluteY="342dp" />
+
+    <EditText
+        android:id="@+id/EV_login_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:text="Mot de passe"
+        tools:layout_editor_absoluteX="60dp"
+        tools:layout_editor_absoluteY="427dp" />
+
+    <Button
+        android:id="@+id/B_connection_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Se connecter"
+        tools:layout_editor_absoluteX="248dp"
+        tools:layout_editor_absoluteY="558dp" />
+
+
+</android.support.constraint.ConstraintLayout>
