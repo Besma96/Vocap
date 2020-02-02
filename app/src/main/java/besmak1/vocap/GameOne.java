@@ -3,7 +3,6 @@ package besmak1.vocap;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
@@ -24,12 +23,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.time.Clock;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Audio_description extends AppCompatActivity {
+public class GameOne extends AppCompatActivity {
     private TextView nom_image;
     private int currentimage = 0;
     private ImageView image;
@@ -39,8 +37,9 @@ public class Audio_description extends AppCompatActivity {
     private String nameCurrentImage;
     private List<String> level;
     private int nbdessai;
+    private ImageView homeIcon;
 
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -51,24 +50,26 @@ public class Audio_description extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() ==0){
-            Intent acceuil = new Intent(Audio_description.this, Acceuil.class);
+            Intent acceuil = new Intent(GameOne.this, Welcome.class);
             startActivity(acceuil);
         }else{
-            Intent main = new Intent(Audio_description.this, MainActivity.class);
+            Intent main = new Intent(GameOne.this, Login.class);
             startActivity(main);
         }
         return true;
     }
+  */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_audio_description);
+        setContentView(R.layout.activity_first_game);
 
-        image = findViewById(R.id.image);
-        nom_image = findViewById(R.id.nom_image);
+        image = findViewById(R.id.IV_displayed_element);
+        nom_image = findViewById(R.id.TV_displayed_image_name);
 
-        ecoute = findViewById(R.id.bouton_ecoute);
-        Button parler = findViewById(R.id.bouton_parler);
+        ecoute = findViewById(R.id.B_listening_jeu1);
+        Button parler = findViewById(R.id.B_speak_jeu1);
 
         level = new ArrayList<>();
         level.add("D1");
@@ -79,7 +80,7 @@ public class Audio_description extends AppCompatActivity {
         nbdessai = 0;
         nameCurrentImage = DisplayreadLevel(level.get(1), currentimage);
         if ( nameCurrentImage.equals("failed")) {
-            Intent revenirAcceuil = new Intent(Audio_description.this, Score_Final.class);
+            Intent revenirAcceuil = new Intent(GameOne.this, Welcome.class);
             startActivity(revenirAcceuil);
         }else{
             mTTs = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
@@ -116,6 +117,18 @@ public class Audio_description extends AppCompatActivity {
                 }
             });
         }
+
+        homeIcon = findViewById(R.id.IV_home_icon_jeu1);
+
+        homeIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent welcomPage = new Intent(GameOne.this, Welcome.class);
+                startActivity(welcomPage);
+            }
+        });
+
+
 
 
     }

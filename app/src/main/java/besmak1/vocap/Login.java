@@ -32,7 +32,7 @@ public class Login extends AppCompatActivity  {
 
         mButtonConnection.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent audio = new Intent(Login.this, Audio_description.class);
+                Intent audio = new Intent(Login.this, Welcome.class);
                 startActivity(audio);
             }
         });
