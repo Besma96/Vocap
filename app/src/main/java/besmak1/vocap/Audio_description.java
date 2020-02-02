@@ -3,6 +3,7 @@ package besmak1.vocap;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -76,39 +78,46 @@ public class Audio_description extends AppCompatActivity {
         retour = "";
         nbdessai = 0;
         nameCurrentImage = DisplayreadLevel(level.get(1), currentimage);
-        mTTs = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status == TextToSpeech.SUCCESS) {
-                    int result = mTTs.setLanguage(Locale.FRANCE);
+        if ( nameCurrentImage.equals("failed")) {
+            Intent revenirAcceuil = new Intent(Audio_description.this, Score_Final.class);
+            startActivity(revenirAcceuil);
+        }else{
+            mTTs = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if (status == TextToSpeech.SUCCESS) {
+                        int result = mTTs.setLanguage(Locale.FRANCE);
 
-                    if (result == TextToSpeech.LANG_MISSING_DATA
-                            || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        Log.e("TTS", "Langugae not supported");
+                        if (result == TextToSpeech.LANG_MISSING_DATA
+                                || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                            Log.e("TTS", "Langugae not supported");
 
+                        } else {
+                            ecoute.setEnabled(true);
+                        }
                     } else {
-                        ecoute.setEnabled(true);
+                        Log.e("TTs", "Initialization failed");
                     }
-                } else {
-                    Log.e("TTs", "Initialization failed");
                 }
-            }
-        });
+            });
 
-        ecoute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                speak();
-            }
-        });
+            ecoute.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    speak();
+                }
+            });
 
-        parler.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getSpeechInput(v);
-                nbdessai ++;
-            }
-        });
+            parler.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getSpeechInput(v);
+                    nbdessai ++;
+                }
+            });
+        }
+
+
     }
 
     public void speak() {
@@ -188,6 +197,11 @@ public class Audio_description extends AppCompatActivity {
         try {
             JSONObject jObject = new JSONObject(loadJSONFromAsset());
             JSONArray pluginfo = jObject.getJSONArray(level);// niveau D1
+            if (i>=pluginfo.length()){
+                System.out.print("failed fin de catch");
+                return "failed";
+            }
+
             JSONObject e = pluginfo.getJSONObject(i);
 
             String imagefile = e.getString("img");
