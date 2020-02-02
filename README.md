@@ -1,11 +1,8 @@
-# Vocap
-Projet Android (suite du hackathon)
+# VOCAP
+Android Project 
 
 ## Version
-V.1.2
-## But : 
-afficher des images + attendre réponse utlisateur + Dire si la réponse est correcte
+V.0
 
-## A faire : 
-- Reconnaissance des émotions
-- Modifier l'algorithme de compléxité suivant le niveau de l'utilisateur en temps réel
+## Goal : 
+Functional application with a menu and a functional login area. Predefined application design.
