@@ -163,6 +163,7 @@ public class GameOne extends AppCompatActivity {
     //verification de la bonne prononcition ou pas de ce qui a ete enregistré
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        GameOneScore gameOneScore = new GameOneScore();
 
         if (requestCode == 1000) {
             if (resultCode == RESULT_OK && data != null && currentPicture<10) {
@@ -172,14 +173,14 @@ public class GameOne extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Bravo ! ", Toast.LENGTH_SHORT).show();
                     currentPicture++;
                     attemptsNumber = 0;
-                    gameScore = gameScore+10;
+                    gameOneScore.setTotalPOint(1);
                     nameCurrentPicture = DisplayreadLevel(level.get(1), currentPicture);
                 } else {
                     if (attemptsNumber > 2) {
                         Toast.makeText(getApplicationContext(), "Ce n'est pas grave, tu y arrivera une prochaine fois", Toast.LENGTH_SHORT).show();
                         currentPicture++;
                         attemptsNumber = 0;
-                        gameScore = gameScore+5;
+                        gameOneScore.setTotalPOint(0);
                         nameCurrentPicture = DisplayreadLevel(level.get(1), currentPicture);
                     } else {
                         Toast.makeText(getApplicationContext(), "Non, c'était " + nameCurrentPicture + ". \n Essaye encore une fois", Toast.LENGTH_SHORT).show();
@@ -188,10 +189,10 @@ public class GameOne extends AppCompatActivity {
                     }
                 }
             }
-            else{
+            else if( currentPicture>=10){
                 setContentView(R.layout.activity_first_game_end);
                 TextView finalScore = findViewById(R.id.TV_displaying_final_score_jeu1);
-                finalScore.append("Score final : " + gameScore);
+                finalScore.append("Score final : " + gameOneScore.getTotalPoint());
             }
         }
     }
