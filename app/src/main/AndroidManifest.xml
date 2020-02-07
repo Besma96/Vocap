@@ -23,6 +23,7 @@
             android:name=".Welcome"
             android:label="@string/title_activity_acceuil" />
         <activity android:name=".GameOne"></activity>
+        <activity android:name=".GameOneScore"></activity>
     </application>
 
 </manifest>

@@ -28,16 +28,19 @@ import java.util.List;
 import java.util.Locale;
 
 public class GameOne extends AppCompatActivity {
-    private TextView nom_image;
-    private int currentimage = 0;
-    private ImageView image;
-    private Button ecoute;
-    private String retour;
+    private TextView pictureName;
+    private ImageView picture;
+    private String nameCurrentPicture;
+
+    private Button listenButton;
+
+    private String comeBack;
     private TextToSpeech mTTs;
-    private String nameCurrentImage;
     private List<String> level;
-    private int nbdessai;
-    private ImageView homeIcon;
+    private int attemptsNumber;
+    private int currentPicture = 0;
+
+    public int gameScore =0;
 
 /*
     @Override
@@ -65,21 +68,21 @@ public class GameOne extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_game);
 
-        image = findViewById(R.id.IV_displayed_element);
-        nom_image = findViewById(R.id.TV_displayed_image_name);
+        picture = findViewById(R.id.IV_displayed_element);
+        pictureName = findViewById(R.id.TV_displayed_image_name);
 
-        ecoute = findViewById(R.id.B_listening_jeu1);
-        Button parler = findViewById(R.id.B_speak_jeu1);
+        listenButton = findViewById(R.id.B_listening_jeu1);
+        Button speakButton = findViewById(R.id.B_speak_jeu1);
 
         level = new ArrayList<>();
         level.add("D1");
         level.add("D2");
         level.add("D3");
 
-        retour = "";
-        nbdessai = 0;
-        nameCurrentImage = DisplayreadLevel(level.get(1), currentimage);
-        if ( nameCurrentImage.equals("failed")) {
+        comeBack = "";
+        attemptsNumber = 0;
+        nameCurrentPicture = DisplayreadLevel(level.get(1), currentPicture);
+        if ( nameCurrentPicture.equals("failed")) {
             Intent revenirAcceuil = new Intent(GameOne.this, Welcome.class);
             startActivity(revenirAcceuil);
         }else{
@@ -94,7 +97,7 @@ public class GameOne extends AppCompatActivity {
                             Log.e("TTS", "Langugae not supported");
 
                         } else {
-                            ecoute.setEnabled(true);
+                            listenButton.setEnabled(true);
                         }
                     } else {
                         Log.e("TTs", "Initialization failed");
@@ -102,23 +105,23 @@ public class GameOne extends AppCompatActivity {
                 }
             });
 
-            ecoute.setOnClickListener(new View.OnClickListener() {
+            listenButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     speak();
                 }
             });
 
-            parler.setOnClickListener(new View.OnClickListener() {
+            speakButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     getSpeechInput(v);
-                    nbdessai ++;
+                    attemptsNumber ++;
                 }
             });
         }
 
-        homeIcon = findViewById(R.id.IV_home_icon_jeu1);
+        ImageView homeIcon = findViewById(R.id.IV_home_icon_jeu1);
 
         homeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,7 +137,7 @@ public class GameOne extends AppCompatActivity {
     }
 
     public void speak() {
-        String txt = nom_image.getText().toString();
+        String txt = pictureName.getText().toString();
         mTTs.speak(txt, TextToSpeech.QUEUE_FLUSH, null);
     }
 
@@ -162,26 +165,33 @@ public class GameOne extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1000) {
-            if (resultCode == RESULT_OK && data != null) {
+            if (resultCode == RESULT_OK && data != null && currentPicture<10) {
                 ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                retour = result.get(0);
-                if (retour.toLowerCase().equals(nameCurrentImage.toLowerCase())) {
+                comeBack = result.get(0);
+                if (comeBack.toLowerCase().equals(nameCurrentPicture.toLowerCase())) {
                     Toast.makeText(getApplicationContext(), "Bravo ! ", Toast.LENGTH_SHORT).show();
-                    currentimage++;
-                    nbdessai = 0;
-                    nameCurrentImage = DisplayreadLevel(level.get(1), currentimage);
+                    currentPicture++;
+                    attemptsNumber = 0;
+                    gameScore = gameScore+10;
+                    nameCurrentPicture = DisplayreadLevel(level.get(1), currentPicture);
                 } else {
-                    if (nbdessai > 2) {
+                    if (attemptsNumber > 2) {
                         Toast.makeText(getApplicationContext(), "Ce n'est pas grave, tu y arrivera une prochaine fois", Toast.LENGTH_SHORT).show();
-                        currentimage++;
-                        nbdessai = 0;
-                        nameCurrentImage = DisplayreadLevel(level.get(1), currentimage);
+                        currentPicture++;
+                        attemptsNumber = 0;
+                        gameScore = gameScore+5;
+                        nameCurrentPicture = DisplayreadLevel(level.get(1), currentPicture);
                     } else {
-                        Toast.makeText(getApplicationContext(), "Non, c'était " + nameCurrentImage + ". \n Essaye encore une fois", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Non, c'était " + nameCurrentPicture + ". \n Essaye encore une fois", Toast.LENGTH_SHORT).show();
                         speak();
-                        nbdessai++;
+                        attemptsNumber++;
                     }
                 }
+            }
+            else{
+                setContentView(R.layout.activity_first_game_end);
+                TextView finalScore = findViewById(R.id.TV_displaying_final_score_jeu1);
+                finalScore.append("Score final : " + gameScore);
             }
         }
     }
@@ -219,16 +229,16 @@ public class GameOne extends AppCompatActivity {
 
             String imagefile = e.getString("img");
             String resName = imagefile.split("\\.")[2];
-            nom_image.setText(resName);
+            pictureName.setText(resName);
             int id = getResources().getIdentifier(resName, "drawable", getPackageName());
             Drawable drawable = getResources().getDrawable(id);
-            image.setImageDrawable(drawable);
+            picture.setImageDrawable(drawable);
 
 
             return resName;
         } catch (JSONException e) {
             e.printStackTrace();
-            nom_image.setText("erreur JSONEXCaption");
+            pictureName.setText("erreur JSONEXCaption");
             return "";
         }
 
