@@ -1,0 +1,7 @@
+tags:
+- name: tag1
+  kind: scalar # strings / numbers
+- name: tag2
+  kind: sequence # arrays / lists
+- name: tag3
+  kind: mapping # hashes / dictionaries
